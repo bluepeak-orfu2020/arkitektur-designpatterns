@@ -1,54 +1,50 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Basgrupp2JärfällaDel1
+namespace TravelApp
 {
     class Program
     {
         static void Main(string[] args)
         {
+            
+                Console.WriteLine("Enter number 1: ");
+                int x = int.Parse(Console.ReadLine());
+                Console.WriteLine("Enter number 2: ");
+                int y = int.Parse(Console.ReadLine());
+                int userChoise = -1;
 
-            Console.WriteLine("Enter number 1: ");
-            int x = int.Parse(Console.ReadLine());
-
-            Console.WriteLine("Enter number 2: ");
-            int y = int.Parse(Console.ReadLine());
-
-            int userChoice = -1;
-
-            while (userChoice != 0)
+            while (userChoise !=0)
             {
-
-                Console.WriteLine("Choose the action: 1 - add, 2 - multiply, 3 - substract, 4 - divide, 0 - to exit.");
+                Console.WriteLine("Choose the action: 1 - add, 2 - multiply, 3 - substract, 4 - devide, 0 - to exit.");
                 try
                 {
-                    userChoice = int.Parse(Console.ReadLine());
+                    userChoise = int.Parse(Console.ReadLine());
                 }
                 catch (Exception)
                 {
-                    userChoice = 5;
+                    userChoise = 5;
                 }
 
                 IStrategy strategy = null;
-                if (userChoice == 1)
+                if (userChoise == 1)
                 {
                     strategy = new AdditionStrategy();
                 }
-                else if (userChoice == 2)
+                else if (userChoise == 2)
                 {
                     strategy = new MultiplicationStrategy();
                 }
-                else if (userChoice == 3)
+                else if (userChoise == 3)
                 {
                     strategy = new SubtractionStrategy();
                 }
-                else if (userChoice == 4)
+                else if (userChoise == 4)
                 {
                     strategy = new DivisionStrategy();
-                }
-                else if (userChoice == 0)
-                {
-                    Console.WriteLine("Exiting!");
-                    break;
                 }
                 else
                 {
@@ -61,6 +57,7 @@ namespace Basgrupp2JärfällaDel1
                 }
             }
 
+            Console.WriteLine("Program exit");
             Console.ReadKey();
 
         }
@@ -77,7 +74,7 @@ namespace Basgrupp2JärfällaDel1
                 return num1 + num2;
             }
         }
-
+        
         public class SubtractionStrategy : IStrategy
         {
             public int Compute(int num1, int num2)
@@ -85,7 +82,7 @@ namespace Basgrupp2JärfällaDel1
                 return num1 - num2;
             }
         }
-
+        
         public class MultiplicationStrategy : IStrategy
         {
             public int Compute(int num1, int num2)
@@ -93,7 +90,7 @@ namespace Basgrupp2JärfällaDel1
                 return num1 * num2;
             }
         }
-
+        
         public class DivisionStrategy : IStrategy
         {
             public int Compute(int num1, int num2)
@@ -102,4 +99,5 @@ namespace Basgrupp2JärfällaDel1
             }
         }
     }
+    
 }
