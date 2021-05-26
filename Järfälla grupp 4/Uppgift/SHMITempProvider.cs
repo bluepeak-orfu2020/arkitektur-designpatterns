@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Uppgift
 {
-    public class SHMITempProvider
+    public class SHMITempProvider : ITempProvider
     {
         public List<TempInC> GetWeatherData()
         {
