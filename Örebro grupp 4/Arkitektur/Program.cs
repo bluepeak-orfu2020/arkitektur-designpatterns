@@ -10,32 +10,22 @@ namespace Arkitektur
     {
         static void Main(string[] args)
         {
+            var commands = new Dictionary<string, MathCommmand> {
+                { "+", new AdditionCommand() },
+                { "-", new SubtractionCommand() },
+                { "/", new DivisionCommand() }
+            };
             Console.WriteLine("Vill du addera(+), subtrahera(-) eller dividera(/)?");
             string opt = Console.ReadLine();
 
-            MathCommmand command = null;
-            if (opt == "+") {
-                Console.WriteLine("Skriv två tal");
-                var tal1 = Convert.ToInt32(Console.ReadLine());
-                var tal2 = Convert.ToInt32(Console.ReadLine());
-                command = new AdditionCommand(tal1, tal2);
-            } else if (opt == "-") {
-                Console.WriteLine("Skriv två tal");
-                var tal1 = Convert.ToInt32(Console.ReadLine());
-                var tal2 = Convert.ToInt32(Console.ReadLine());
-                command = new SubtractionCommand(tal1, tal2);
-            } else if (opt == "/") {
-                Console.WriteLine("Skriv två tal");
-                var tal1 = Convert.ToInt32(Console.ReadLine());
-                var tal2 = Convert.ToInt32(Console.ReadLine());
-                command = new DivisionCommand(tal1, tal2);
-            } else {
-                Console.WriteLine("Ogiltigt val");
-            }
-
-            if (command != null)
+            if (commands.ContainsKey(opt))
             {
+                MathCommmand command = commands[opt];
                 command.Execute();
+            }
+            else
+            {
+                Console.WriteLine("Ogiltigt val");
             }
 
             Console.ReadLine();
@@ -46,57 +36,44 @@ namespace Arkitektur
             void Execute();
         }
 
-        class AdditionCommand : MathCommmand
+        abstract class TwoNumberMathCommand : MathCommmand
         {
-            int x;
-            int y;
-
-            public AdditionCommand(int x, int y)
-            {
-                this.x = x;
-                this.y = y;
-            }
-
             public void Execute()
             {
-                var sum = x + y;
-                Console.WriteLine($"Resultatet av adderingen blev: {sum}");
+                Console.WriteLine("Skriv två tal");
+                var tal1 = Convert.ToInt32(Console.ReadLine());
+                var tal2 = Convert.ToInt32(Console.ReadLine());
+                var result = Compute(tal1, tal2);
+                Console.WriteLine($"Resultatet av adderingen blev: {result}");
+            }
+
+            protected abstract int Compute(int tal1, int tal2);
+        }
+
+        class AdditionCommand : TwoNumberMathCommand
+        {
+
+            protected override int Compute(int tal1, int tal2)
+            {
+                return tal1 + tal2;
             }
         }
         
-        class SubtractionCommand : MathCommmand
+        class SubtractionCommand : TwoNumberMathCommand
         {
-            int x;
-            int y;
 
-            public SubtractionCommand(int x, int y)
+            protected override int Compute(int tal1, int tal2)
             {
-                this.x = x;
-                this.y = y;
-            }
-
-            public void Execute()
-            {
-                var sum = x - y;
-                Console.WriteLine($"Resultatet av subtraktion blev: {sum}");
+                return tal1 - tal2;
             }
         }
-        
-        class DivisionCommand : MathCommmand
+
+        class DivisionCommand : TwoNumberMathCommand
         {
-            int x;
-            int y;
 
-            public DivisionCommand(int x, int y)
+            protected override int Compute(int tal1, int tal2)
             {
-                this.x = x;
-                this.y = y;
-            }
-
-            public void Execute()
-            {
-                var sum = x / y;
-                Console.WriteLine($"Resultatet av divideringen blev: {sum}");
+                return tal1 / tal2;
             }
         }
     }
