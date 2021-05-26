@@ -9,7 +9,9 @@ namespace ObserverPattern
         {
             var manager = new Manager();
             var supplier = new Supplier();
-            var storage = new Storage(manager, supplier);
+            var storage = new Storage();
+            storage.AddSubscriber(manager);
+            storage.AddSubscriber(supplier);
             var commands = new Dictionary<string, IStorageCommand>() {
                 { "a", new AddCommand(storage) },
                 { "r", new RemoveCommand(storage) }
@@ -33,58 +35,89 @@ namespace ObserverPattern
 
     class Storage
     {
-        int stuff;
-        Manager manager;
-        Supplier supplier;
+        public int Stuff { get; private set; }
 
-        public Storage(Manager manager, Supplier supplier)
+        List<IStuffObserver> observers;
+
+        public Storage()
         {
-            stuff = 10;
-            this.manager = manager;
-            this.supplier = supplier;
+            Stuff = 10;
+            observers = new List<IStuffObserver>();
+        }
+
+        public void AddSubscriber(IStuffObserver observer)
+        {
+            observers.Add(observer);
+        }
+
+        public void RemoveSubscriber(IStuffObserver observer)
+        {
+            observers.Remove(observer);
+        }
+        private void NotifySubscribers()
+        {
+            foreach (var observer in observers)
+            {
+                observer.Update(this);
+            }
         }
 
         public void AddStuff()
         {
-            stuff += new Random().Next(1, 4);
-            if (stuff > 15)
-            {
-                supplier.StopNewOrders();
-            }
+            Stuff += new Random().Next(1, 4);
+            NotifySubscribers();
         }
 
         public void RemoveStuff()
         {
-            stuff -= new Random().Next(1, 4);
-            if (stuff < 0)
+            Stuff -= new Random().Next(1, 4);
+            if (Stuff < 0)
             {
-                stuff = 0;
+                Stuff = 0;
             }
-            if (stuff < 5)
-            {
-                manager.OutOfStuff();
-            }
+            NotifySubscribers();
         }
 
         public void PrintStuffStatus()
         {
-            Console.WriteLine($"We have {stuff} stuff");
+            Console.WriteLine($"We have {Stuff} stuff");
         }
     }
 
-    class Manager
+    interface IStuffObserver
+    {
+        void Update(Storage storage);
+    }
+
+    class Manager : IStuffObserver
     {
         public void OutOfStuff()
         {
             Console.WriteLine("Manager: We must buy stuff");
         }
+
+        public void Update(Storage storage)
+        {
+            if (storage.Stuff < 5)
+            {
+                OutOfStuff();
+            }
+        }
     }
 
-    class Supplier
+    class Supplier : IStuffObserver
     {
         public void StopNewOrders()
         {
             Console.WriteLine("Supplier: I'm not going to send more stuff");
+        }
+
+        public void Update(Storage storage)
+        {
+            if (storage.Stuff > 15)
+            {
+                StopNewOrders();
+            }
         }
     }
 
