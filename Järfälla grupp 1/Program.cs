@@ -7,36 +7,17 @@ namespace Bad_example
         static void Main(string[] args)
         {
             // Skapa tre användare
-            GoldMember kalle = new GoldMember("Kalle", "password", "kalle@kalle.se");
-
-            PlatinumMember gustav = new PlatinumMember("Gustav", "gurraking", "Gurra@Gurra.se");
-
-            VIPMember curt = new VIPMember("Curt", "Kurt", "Curt@kurt.se");
-
-
+            Member kalle = new Member("Kalle", "password", "kalle@kalle.se");
 
             // Skriver ut hur många videos kalle har tillgång till nu som GoldMember
             Console.WriteLine($"Kalle innan uppgradering {kalle.VideosAvailible()}");
 
-            //Skapa en ny variant av kalle - "upgradedKalle" med hjälp av metoden upgradeUser där kalle är argumentet
-            PlatinumMember upgradedKalle = upgradeUser(kalle);
+            kalle.UpgradeMembership(); // Upgrade from gold to platinum
+            //kalle.UpgradeMembership(); // Upgrade from platunim to VIP
+            //kalle.UpgradeMembership(); // No more upgrades available
 
             //Skiva ut hur många videos den nya upgradera versionen av Kalle har som platinumMember
-            Console.WriteLine($"Kalle efter uppgradering {upgradedKalle.VideosAvailible()}");
-        }
-
-
-        // Overloaded methods av att uppgradera användare, finns ej att nergradera än...
-        static PlatinumMember upgradeUser(GoldMember goldmember)
-        {
-            PlatinumMember newplat = new PlatinumMember(goldmember.UserName, goldmember.Password, goldmember.Email);
-            return newplat;
-        }
-
-        static VIPMember upgradeUser(PlatinumMember platmember)
-        {
-            VIPMember newvip = new VIPMember(platmember.UserName, platmember.Password, platmember.Email);
-            return newvip;
+            Console.WriteLine($"Kalle efter uppgradering {kalle.VideosAvailible()}");
         }
     }
 }
