@@ -8,25 +8,30 @@ namespace DesignPatternGuess
 {
     class Prod
     {
-        
-        public IVehicle Production(string type, string brand)
+        private IAbFactory GetFactory(string type)
         {
             if (type == "car")
             {
-                return Car.CreateVehicle(brand);
+                return new CarFactory();
             }
             else if (type == "motorcycle")
             {
-                return Motorcycle.CreateVehicle(brand);
+                return new MotorcycleFactory();
             }
             else if (type == "scooter")
             {
-                return Scooter.CreateVehicle(brand);
+                return new ScooterFactory();
             }
             else
             {
                 throw new Exception("we dont make that type of vehicle(car, motorcycle, scooter)");
             }
+        }
+        
+        public IVehicle Production(string type, string brand)
+        {
+            IAbFactory factory = GetFactory(type);
+            return factory.CreateVehicle(brand);
         }
     }
 }

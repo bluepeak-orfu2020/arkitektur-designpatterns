@@ -12,16 +12,5 @@ namespace DesignPatternGuess
         public string Brand { get; set; }
         public string Color { get; set; }
         public string Type { get; set; }
-
-
-        public static Car CreateVehicle(string brand)
-        {
-            Car car = new Car();
-            car.Type = "Car";
-            car.Color = "Black";
-            car.Wheels = 4;
-            car.Brand = brand;
-            return car;
-        }
     }
 }
